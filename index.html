@@ -2,196 +2,685 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>我的图床</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人博客图床</title>
+
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-  background:#f5f5f5;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
-  color:#333;
+* {
+  box-sizing: border-box;
 }
-.box{
-  width:100%;
-  max-width:520px;
-  background:#fff;
-  padding:28px;
-  border-radius:18px;
-  box-shadow:0 8px 30px rgba(0,0,0,.08);
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f5f7;
+  color: #222;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Microsoft YaHei",
+    sans-serif;
 }
-h1{
-  margin:0 0 8px;
-  font-size:24px;
+
+.container {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
 }
-.tip{
-  margin:0 0 24px;
-  color:#888;
-  font-size:14px;
+
+h1 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 700;
 }
-label{
-  display:block;
-  margin:16px 0 7px;
-  font-size:14px;
-  font-weight:600;
+
+.subtitle {
+  margin: 8px 0 24px;
+  color: #888;
+  font-size: 14px;
 }
+
+label {
+  display: block;
+  margin-top: 17px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 input[type="text"],
 input[type="password"],
-input[type="file"]{
-  width:100%;
-  padding:11px 12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  background:#fafafa;
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 11px;
+  background: #fafafa;
+  color: #222;
+  font-size: 14px;
 }
-button{
-  width:100%;
-  margin-top:20px;
-  padding:12px;
-  border:0;
-  border-radius:10px;
-  background:#222;
-  color:#fff;
-  font-size:15px;
-  cursor:pointer;
+
+input:focus {
+  outline: none;
+  border-color: #999;
+  background: #fff;
 }
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 13px;
+  border: 0;
+  border-radius: 11px;
+  background: #222;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
 }
-#status{
-  margin-top:18px;
-  padding:12px;
-  border-radius:10px;
-  background:#f7f7f7;
-  font-size:14px;
-  line-height:1.6;
-  word-break:break-all;
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
-#result{
-  margin-top:12px;
-  word-break:break-all;
+
+.status {
+  margin-top: 18px;
+  padding: 13px;
+  border-radius: 11px;
+  background: #f7f7f7;
+  font-size: 14px;
+  line-height: 1.65;
+  word-break: break-word;
 }
-#result a{
-  color:#1677ff;
+
+.result {
+  margin-top: 12px;
+  padding: 13px;
+  border-radius: 11px;
+  background: #fafafa;
+  font-size: 13px;
+  line-height: 1.7;
+  word-break: break-all;
+}
+
+.result a {
+  color: #1677ff;
+  text-decoration: none;
+}
+
+.result a:hover {
+  text-decoration: underline;
+}
+
+.preview {
+  display: none;
+  width: 100%;
+  max-height: 300px;
+  margin-top: 18px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f5f5f5;
+}
+
+.small {
+  margin-top: 9px;
+  color: #999;
+  font-size: 12px;
 }
 </style>
 </head>
 
 <body>
-<div class="box">
-  <h1>📷 我的图床</h1>
-  <p class="tip">上传图片到 GitHub，自动生成图片链接</p>
 
-  <label>GitHub 用户名</label>
-  <input id="username" type="text" placeholder="例如：yanyii0216">
+<div class="container">
 
-  <label>仓库名</label>
-  <input id="repo" type="text" value="image-bed">
+  <h1>📷 个人博客图床</h1>
 
-  <label>私人令牌</label>
-  <input id="token" type="password" placeholder="只在这里输入，不要发给别人">
+  <p class="subtitle">
+    上传图片到 GitHub，自动生成图片链接
+  </p>
 
-  <label>选择图片</label>
-  <input id="file" type="file" accept="image/*">
+  <label for="username">GitHub 用户名</label>
+  <input
+    id="username"
+    type="text"
+    value="yanyii0216"
+    placeholder="例如：yanyii0216"
+  >
 
-  <button id="upload">上传图片</button>
+  <label for="repo">仓库名</label>
+  <input
+    id="repo"
+    type="text"
+    value="image-bed"
+    placeholder="例如：image-bed"
+  >
 
-  <div id="status">等待上传……</div>
-  <div id="result"></div>
+  <label for="token">GitHub 私人令牌</label>
+  <input
+    id="token"
+    type="password"
+    placeholder="只在这里输入，不要发给任何人"
+    autocomplete="off"
+  >
+
+  <label for="file">选择图片</label>
+  <input
+    id="file"
+    type="file"
+    accept="image/*"
+  >
+
+  <img id="preview" class="preview" alt="图片预览">
+
+  <button id="uploadButton">
+    上传图片
+  </button>
+
+  <div id="status" class="status">
+    等待上传……
+  </div>
+
+  <div id="result" class="result" style="display:none;"></div>
+
+  <div class="small">
+    图片会上传到 GitHub 的 images 文件夹。
+  </div>
+
 </div>
 
-<script>
-const uploadBtn = document.getElementById("upload");
-const status = document.getElementById("status");
-const result = document.getElementById("result");
 
-uploadBtn.onclick = async () => {
-  const username = document.getElementById("username").value.trim();
-  const repo = document.getElementById("repo").value.trim();
-  const token = document.getElementById("token").value.trim();
-  const fileInput = document.getElementById("file");
+<script>
+
+const uploadButton = document.getElementById("uploadButton");
+const statusBox = document.getElementById("status");
+const resultBox = document.getElementById("result");
+const fileInput = document.getElementById("file");
+const preview = document.getElementById("preview");
+
+
+/* =========================
+   图片预览
+========================= */
+
+fileInput.addEventListener("change", () => {
+
   const file = fileInput.files[0];
 
-  if (!username || !repo || !token || !file) {
-    status.textContent = "请把用户名、仓库名、令牌和图片都填写好。";
+  if (!file) {
+    preview.style.display = "none";
     return;
   }
 
-  uploadBtn.disabled = true;
-  status.textContent = "正在上传……";
-  result.innerHTML = "";
+  if (!file.type.startsWith("image/")) {
+    preview.style.display = "none";
+    statusBox.textContent = "❌ 请选择图片文件。";
+    return;
+  }
+
+  const objectURL = URL.createObjectURL(file);
+
+  preview.src = objectURL;
+  preview.style.display = "block";
+
+  statusBox.textContent =
+    `已选择：${file.name}（${formatSize(file.size)}）`;
+
+});
+
+
+/* =========================
+   文件大小显示
+========================= */
+
+function formatSize(bytes) {
+
+  if (bytes < 1024) {
+    return bytes + " B";
+  }
+
+  if (bytes < 1024 * 1024) {
+    return (bytes / 1024).toFixed(1) + " KB";
+  }
+
+  return (bytes / 1024 / 1024).toFixed(2) + " MB";
+}
+
+
+/* =========================
+   ArrayBuffer → Base64
+========================= */
+
+function arrayBufferToBase64(buffer) {
+
+  const bytes = new Uint8Array(buffer);
+
+  let binary = "";
+
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+
+    const chunk = bytes.subarray(
+      i,
+      Math.min(i + chunkSize, bytes.length)
+    );
+
+    binary += String.fromCharCode(...chunk);
+  }
+
+  return btoa(binary);
+}
+
+
+/* =========================
+   GitHub API 请求
+========================= */
+
+async function githubRequest(url, options = {}) {
+
+  return fetch(url, {
+
+    ...options,
+
+    headers: {
+
+      "Accept":
+        "application/vnd.github+json",
+
+      "Authorization":
+        `Bearer ${document.getElementById("token").value.trim()}`,
+
+      "X-GitHub-Api-Version":
+        "2026-03-10",
+
+      ...options.headers
+
+    }
+
+  });
+
+}
+
+
+/* =========================
+   上传
+========================= */
+
+uploadButton.addEventListener("click", async () => {
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  const repo =
+    document.getElementById("repo").value.trim();
+
+  const token =
+    document.getElementById("token").value.trim();
+
+  const file =
+    fileInput.files[0];
+
+
+  /* ---------- 基础检查 ---------- */
+
+  if (!username) {
+
+    statusBox.textContent =
+      "❌ 请填写 GitHub 用户名。";
+
+    return;
+  }
+
+  if (!repo) {
+
+    statusBox.textContent =
+      "❌ 请填写仓库名。";
+
+    return;
+  }
+
+  if (!token) {
+
+    statusBox.textContent =
+      "❌ 请填写私人令牌。";
+
+    return;
+  }
+
+  if (!file) {
+
+    statusBox.textContent =
+      "❌ 请先选择图片。";
+
+    return;
+  }
+
+
+  if (!file.type.startsWith("image/")) {
+
+    statusBox.textContent =
+      "❌ 只能上传图片。";
+
+    return;
+  }
+
+
+  /* GitHub Contents API 对大文件并不适合 */
+
+  const maxSize =
+    20 * 1024 * 1024;
+
+  if (file.size > maxSize) {
+
+    statusBox.textContent =
+      "❌ 图片太大了，请选择 20 MB 以下的图片。";
+
+    return;
+  }
+
+
+  /* ---------- 开始 ---------- */
+
+  uploadButton.disabled = true;
+
+  resultBox.style.display = "none";
+  resultBox.innerHTML = "";
+
+  statusBox.textContent =
+    "⏳ 正在检查 GitHub 仓库……";
+
 
   try {
-    const arrayBuffer = await file.arrayBuffer();
-    const bytes = new Uint8Array(arrayBuffer);
 
-    let binary = "";
-    const chunkSize = 0x8000;
+    /* =========================
+       第一步：检查仓库
+    ========================= */
 
-    for (let i = 0; i < bytes.length; i += chunkSize) {
-      binary += String.fromCharCode(
-        ...bytes.subarray(i, i + chunkSize)
+    const repoURL =
+      `https://api.github.com/repos/${encodeURIComponent(username)}/${encodeURIComponent(repo)}`;
+
+    const repoResponse =
+      await githubRequest(repoURL, {
+        method: "GET"
+      });
+
+
+    if (!repoResponse.ok) {
+
+      let repoData = {};
+
+      try {
+        repoData = await repoResponse.json();
+      } catch (_) {}
+
+      const message =
+        repoData.message || "未知错误";
+
+      if (repoResponse.status === 401) {
+
+        throw new Error(
+          "私人令牌无效或已过期。请检查令牌。"
+        );
+
+      }
+
+      if (repoResponse.status === 403) {
+
+        throw new Error(
+          "GitHub 拒绝访问。请检查私人令牌权限。"
+        );
+
+      }
+
+      if (repoResponse.status === 404) {
+
+        throw new Error(
+          "GitHub 找不到这个仓库。请检查用户名和仓库名；如果你使用的是细粒度令牌，还要确认令牌已授权 image-bed 仓库。"
+        );
+
+      }
+
+      throw new Error(
+        `检查仓库失败（${repoResponse.status}）：${message}`
       );
     }
 
-    const base64 = btoa(binary);
 
-    const ext = file.name.includes(".")
-      ? file.name.substring(file.name.lastIndexOf("."))
-      : "";
+    /* =========================
+       第二步：读取图片
+    ========================= */
+
+    statusBox.textContent =
+      "⏳ 正在读取图片……";
+
+
+    const buffer =
+      await file.arrayBuffer();
+
+
+    const base64 =
+      arrayBufferToBase64(buffer);
+
+
+    /* =========================
+       第三步：生成文件名
+    ========================= */
+
+    const originalName =
+      file.name;
+
+    let extension = "";
+
+    const dotIndex =
+      originalName.lastIndexOf(".");
+
+    if (dotIndex !== -1) {
+
+      extension =
+        originalName
+          .substring(dotIndex)
+          .toLowerCase();
+    }
+
+
+    const safeExtension =
+      extension || ".png";
+
 
     const filename =
       Date.now() +
       "-" +
-      Math.random().toString(36).slice(2, 8) +
-      ext;
+      Math.random()
+        .toString(36)
+        .substring(2, 10) +
+      safeExtension;
 
-    const path = "images/" + filename;
 
-    const response = await fetch(
-      `https://api.github.com/repos/${username}/${repo}/contents/${path}`,
-      {
+    const path =
+      `images/${filename}`;
+
+
+    /* =========================
+       第四步：上传
+    ========================= */
+
+    statusBox.textContent =
+      "⏳ 正在上传到 GitHub……";
+
+
+    const uploadURL =
+      `https://api.github.com/repos/${encodeURIComponent(username)}/${encodeURIComponent(repo)}/contents/${path}`;
+
+
+    const uploadResponse =
+      await githubRequest(uploadURL, {
+
         method: "PUT",
+
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Accept": "application/vnd.github+json",
-          "Content-Type": "application/json"
+          "Content-Type":
+            "application/json"
         },
+
         body: JSON.stringify({
-          message: "Upload image: " + filename,
-          content: base64
+
+          message:
+            `Upload image: ${filename}`,
+
+          content:
+            base64,
+
+          branch:
+            "main"
+
         })
+
+      });
+
+
+    let data = {};
+
+    try {
+      data = await uploadResponse.json();
+    } catch (_) {}
+
+
+    /* =========================
+       第五步：错误处理
+    ========================= */
+
+    if (!uploadResponse.ok) {
+
+      const message =
+        data.message || "未知错误";
+
+
+      if (uploadResponse.status === 401) {
+
+        throw new Error(
+          "私人令牌无效、过期，或者没有通过 GitHub 身份验证。"
+        );
+
       }
-    );
 
-    const data = await response.json();
 
-    if (!response.ok) {
+      if (uploadResponse.status === 403) {
+
+        throw new Error(
+          "私人令牌没有写入权限。细粒度令牌请检查：Repository access → image-bed → Contents → Read and write。"
+        );
+
+      }
+
+
+      if (uploadResponse.status === 404) {
+
+        throw new Error(
+          "GitHub API 返回 Not Found。通常是：仓库名/用户名不对，或者私人令牌没有授权 image-bed 仓库。"
+        );
+
+      }
+
+
+      if (uploadResponse.status === 409) {
+
+        throw new Error(
+          "GitHub 返回 Conflict，请稍后重新上传。"
+        );
+
+      }
+
+
+      if (uploadResponse.status === 422) {
+
+        throw new Error(
+          `GitHub 返回 422：${message}`
+        );
+
+      }
+
+
       throw new Error(
-        data.message || "GitHub 上传失败"
+        `上传失败（${uploadResponse.status}）：${message}`
       );
+
     }
 
-    const imageUrl =
+
+    /* =========================
+       第六步：生成链接
+    ========================= */
+
+    const githubPagesURL =
       `https://${username}.github.io/${repo}/${path}`;
 
-    status.textContent = "✅ 上传成功！";
+    const rawURL =
+      `https://raw.githubusercontent.com/${username}/${repo}/main/${path}`;
 
-    result.innerHTML =
-      `<a href="${imageUrl}" target="_blank">${imageUrl}</a>`;
+
+    /* =========================
+       成功
+    ========================= */
+
+    statusBox.textContent =
+      "✅ 上传成功！";
+
+
+    resultBox.style.display =
+      "block";
+
+
+    resultBox.innerHTML = `
+
+      <div>
+        <strong>GitHub Pages 图片链接：</strong><br>
+        <a
+          href="${githubPagesURL}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >${githubPagesURL}</a>
+      </div>
+
+      <br>
+
+      <div>
+        <strong>GitHub Raw 图片链接：</strong><br>
+        <a
+          href="${rawURL}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >${rawURL}</a>
+      </div>
+
+    `;
+
 
   } catch (error) {
-    status.textContent = "❌ 上传失败：" + error.message;
+
+    console.error(error);
+
+    statusBox.textContent =
+      "❌ " + error.message;
+
+
   } finally {
-    uploadBtn.disabled = false;
+
+    uploadButton.disabled =
+      false;
+
   }
-};
+
+});
+
 </script>
 
 </body>
